@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Index | Agent Flow</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+      scroll-behavior: smooth; /* smooth navigation */
+    }
+
+    body {
+      margin: 0;
+      background: #f8fafc;
+      color: #1f2937;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #0f172a, #1e40af);
+      color: #ffffff;
+      padding: 28px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: #c7d2fe;
+    }
+
+    /* Tile Container */
+    .container {
+      max-width: 1100px;
+      margin: 50px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    /* Tiles (Hyperlinks) */
+    .tile {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 34px 24px;
+      text-align: center;
+      text-decoration: none;
+      color: #0f172a;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Accent bar */
+    .tile::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 5px;
+      width: 100%;
+      background: #22c55e;
+      transform: scaleX(0);
+      transition: transform 0.25s ease;
+      transform-origin: left;
+    }
+
+    .tile:hover::before {
+      transform: scaleX(1);
+    }
+
+    .tile:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+      color: #1e40af;
+    }
+
+    .tile h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    .tile p {
+      margin: 0;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    /* Sections */
+    section {
+      max-width: 900px;
+      margin: 70px auto;
+      padding: 32px;
+      background: #ffffff;
+      border-radius: 14px;
+      border-left: 6px solid #1e40af;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    section h2 {
+      margin-top: 0;
+      color: #1e40af;
+    }
+
+    section p {
+      line-height: 1.7;
+      color: #334155;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #64748b;
+      font-size: 14px;
+      background: #f1f5f9;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Agent Execution Flow</h1>
+    <p>Click a tile to navigate through the flow</p>
+  </header>
+
+  <!-- Tiles (Navigation Links) -->
+  <div class="container">
+    <a href="one_langgraphexectionflow.html" class="tile">
+      <h2> 1 . Langrapgh Exection flow </h2>
+      <p>Sample navigation link for execution flow</p>
+    </a>
+
+    <!-- You can add more tiles later -->
+    <!--
+    <a href="#section2" class="tile">
+      <h2>Another Flow</h2>
+      <p>Description here</p>
+    </a>
+    -->
+  </div>
+
+  <!-- Target Section -->
+  <section id="dummy">
+    <h2>Dummy Content Section</h2>
+    <p>
+      This section demonstrates the hyperlink navigation flow.
+      When the user clicks the tile above, the page smoothly scrolls
+      to this content area.
+    </p>
+    <p>
+      You can replace this text with your real agent execution flow,
+      logic explanation, or documentation content.
+    </p>
+  </section>
+
+  <footer>
+    © 2026 My Website. All rights reserved.
+  </footer>
+
+</body>
+</html>
