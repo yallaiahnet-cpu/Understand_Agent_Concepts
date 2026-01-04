@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangGraph Flight Booking Workflow - Complete Visualization</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e6e6e6;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            color: #4cc9f0;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(76, 201, 240, 0.3);
+        }
+        
+        .subtitle {
+            color: #72efdd;
+            font-size: 1.3rem;
+            font-weight: 300;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-icon {
+            background: rgba(76, 201, 240, 0.15);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: #4cc9f0;
+        }
+        
+        .card-title {
+            color: #72efdd;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+        
+        h2 {
+            color: #4cc9f0;
+            margin: 25px 0 15px 0;
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            color: #72efdd;
+            margin: 20px 0 10px 0;
+            font-size: 1.4rem;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .highlight {
+            color: #f72585;
+            font-weight: 600;
+            background: rgba(247, 37, 133, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-left: 4px solid #4cc9f0;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+        }
+        
+        .execution-step {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 5px solid #4361ee;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #4361ee;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .flow-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .flow-item {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .mermaid-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            overflow: auto;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .state-field {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #f72585;
+        }
+        
+        .field-name {
+            color: #f72585;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px 8px 0 0;
+            margin-right: 5px;
+            transition: background 0.3s;
+        }
+        
+        .tab.active {
+            background: rgba(76, 201, 240, 0.2);
+            color: #4cc9f0;
+            border-bottom: 3px solid #4cc9f0;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .comparison-table th {
+            background: rgba(76, 201, 240, 0.2);
+            color: #4cc9f0;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .comparison-table td:first-child {
+            font-weight: bold;
+            color: #72efdd;
+        }
+        
+        .analogy-box {
+            background: rgba(114, 239, 221, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #72efdd;
+        }
+        
+        .analogy-title {
+            color: #72efdd;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .visual-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .flow-step {
+            background: rgba(67, 97, 238, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            text-align: center;
+            min-width: 120px;
+            border: 2px solid #4361ee;
+        }
+        
+        .arrow {
+            font-size: 2rem;
+            color: #4cc9f0;
+            margin: 0 10px;
+        }
+        
+        .key-point {
+            background: rgba(247, 37, 133, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #f72585;
+        }
+        
+        .success {
+            color: #4ade80;
+        }
+        
+        .error {
+            color: #f87171;
+        }
+        
+        .warning {
+            color: #fbbf24;
+        }
+        
+        .info {
+            color: #60a5fa;
+        }
+        
+        @media (max-width: 768px) {
+            .flow-container {
+                flex-direction: column;
+            }
+            
+            .visual-flow {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+                margin: 10px 0;
+            }
+        }
+        
+        .interactive-btn {
+            background: linear-gradient(to right, #4361ee, #4cc9f0);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .interactive-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-plane-departure"></i> LangGraph Flight Booking Workflow</h1>
+            <p class="subtitle">Complete Visualization & Step-by-Step Execution Flow Explained</p>
+        </header>
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <div class="card-title">🚀 Where Does Execution Start in LangGraph?</div>
+            </div>
+            
+            <div class="key-point">
+                <p><span class="highlight">CRITICAL UNDERSTANDING:</span> Execution in LangGraph starts with the <span class="highlight">app.invoke()</span> call - NOT in a node or edge!</p>
+            </div>
+            
+            <h2>LangGraph Execution vs Java Execution</h2>
+            
+            <div class="comparison-table">
+                <table>
+                    <tr>
+                        <th>Java Program</th>
+                        <th>LangGraph Workflow</th>
+                    </tr>
+                    <tr>
+                        <td>Execution starts at <code>main()</code> method</td>
+                        <td>Execution starts at <code>app.invoke()</code> call</td>
+                    </tr>
+                    <tr>
+                        <td><code>main()</code> calls methods in order</td>
+                        <td><code>app.invoke()</code> starts workflow engine</td>
+                    </tr>
+                    <tr>
+                        <td>Methods execute sequentially</td>
+                        <td>Edges determine which node to execute next</td>
+                    </tr>
+                    <tr>
+                        <td>Return values passed between methods</td>
+                        <td>State object passed between nodes</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="analogy-box">
+                <div class="analogy-title">🍳 Cooking Analogy:</div>
+                <p><strong>Java:</strong> You read a recipe from top to bottom, executing each step in order.</p>
+                <p><strong>LangGraph:</strong> You have a flowchart where arrows tell you which step to do next.</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-sitemap"></i>
+                </div>
+                <div class="card-title">📊 Complete Workflow Visualization</div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('tab1')">Workflow Graph</div>
+                <div class="tab" onclick="showTab('tab2')">Execution Flow</div>
+                <div class="tab" onclick="showTab('tab3')">State Flow</div>
+            </div>
+            
+            <div id="tab1" class="tab-content active">
+                <div class="mermaid-container">
+                    <div class="mermaid">
+graph TD
+    START[START] --> N1[validate_input<br/>Check user input]
+    
+    N1 -->|complete| N5[search_flights<br/>Search for flights]
+    N1 -->|incomplete| N2[request_missing_info<br/>Ask user for info<br/>INTERRUPT PAUSE]
+    
+    N2 --> N3[fill_missing_fields<br/>Process user response]
+    N3 --> N1
+    
+    N5 --> N6[compare_select<br/>Compare & select flight]
+    
+    N6 -->|no_flights| N9[handle_no_flights<br/>No flights found]
+    N6 -->|continue| N7[check_approval<br/>Check if approval needed]
+    
+    N7 -->|needs_approval| N8[request_approval<br/>Request approval<br/>INTERRUPT PAUSE]
+    N7 -->|skip_approval| N10[book_flight<br/>Book the flight]
+    
+    N8 --> N11[process_approval<br/>Process approval decision]
+    
+    N11 -->|approved| N10
+    N11 -->|rejected| END
+    N11 -->|pending| END
+    
+    N10 -->|success| N12[send_confirmation<br/>Send confirmation]
+    N10 -->|retry| N10
+    N10 -->|error| N13[handle_error<br/>Handle booking error]
+    
+    N12 --> END
+    N13 --> END
+    N9 --> END
+    
+    classDef startEnd fill:#2ecc71,stroke:#27ae60,color:white
+    classDef node fill:#3498db,stroke:#2980b9,color:white
+    classDef interrupt fill:#e74c3c,stroke:#c0392b,color:white
+    
+    class START,END startEnd
+    class N1,N3,N5,N6,N7,N9,N10,N11,N12,N13 node
+    class N2,N8 interrupt
+                    </div>
+                </div>
+                
+                <div class="visual-flow">
+                    <div class="flow-step">User Clicks "Book"</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-step">app.invoke()</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-step">START Edge</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-step">First Node</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-step">Next Node</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-step">... Until END</div>
+                </div>
+            </div>
+            
+            <div id="tab2" class="tab-content">
+                <h3>🔄 Step-by-Step Execution Flow</h3>
+                
+                <div class="execution-step">
+                    <div class="step-number">1</div>
+                    <span class="highlight">User Action:</span> User fills form and clicks "Book Flight" button
+                    <div class="code-block">
+// In your application code (like Java main() method)
+initial_state = {
+    "destination": "New York",
+    "departure_date": "2024-12-25",
+    "passenger_count": 1,
+    "max_budget": 500.0
+}
+
+config = {"configurable": {"thread_id": "booking-001"}}
+
+<span class="highlight">// EXECUTION STARTS HERE!</span>
+result = app.invoke(initial_state, config)
+                    </div>
+                </div>
+                
+                <div class="execution-step">
+                    <div class="step-number">2</div>
+                    <span class="highlight">LangGraph Engine Starts:</span> LangGraph receives the invoke() call
+                    <p>LangGraph: <i>"OK, I need to execute this workflow. Let me check where to start..."</i></p>
+                </div>
+                
+                <div class="execution-step">
+                    <div class="step-number">3</div>
+                    <span class="highlight">Find Starting Point:</span> LangGraph looks for edges from START
+                    <p>LangGraph: <i>"Looking at my graph structure... Found: START → 'validate_input'"</i></p>
+                    <div class="code-block">
+// In your workflow definition
+workflow.add_edge(START, "validate_input")
+                    </div>
+                </div>
+                
+                <div class="execution-step">
+                    <div class="step-number">4</div>
+                    <span class="highlight">Execute First Node:</span> LangGraph executes the validate_input node
+                    <p>LangGraph: <i>"The edge says to go to 'validate_input' node. Calling validate_user_input(state)..."</i></p>
+                    <div class="code-block">
+# LangGraph internally does:
+current_state = initial_state
+current_state = validate_user_input(current_state)
+                    </div>
+                </div>
+                
+                <div class="execution-step">
+                    <div class="step-number">5</div>
+                    <span class="highlight">Node Returns Updated State:</span> validate_input node finishes
+                    <p>Node returns: <i>"Here's the updated state with validation results"</i></p>
+                </div>
+                
+                <div class="execution-step">
+                    <div class="step-number">6</div>
+                    <span class="highlight">Find Next Step:</span> LangGraph looks for edges from validate_input
+                    <p>LangGraph: <i>"validate_input finished. Where next? Found conditional edge with decision function."</i></p>
+                    <div class="code-block">
+// In workflow definition
+workflow.add_conditional_edges(
+    "validate_input",
+    lambda state: "complete" if state.get("input_complete") else "incomplete",
+    {
+        "complete": "search_flights",
+        "incomplete": "request_missing"
+    }
+)
+                    </div>
+                </div>
+                
+                <div class="execution-step">
+                    <div class="step-number">7</div>
+                    <span class="highlight">Make Decision:</span> LangGraph calls decision function
+                    <div class="code-block">
+# LangGraph internally does:
+decision = decision_function(current_state)
+# Returns "complete" or "incomplete"
+                    </div>
+                </div>
+                
+                <div class="execution-step">
+                    <div class="step-number">8</div>
+                    <span class="highlight">Route to Next Node:</span> Based on decision, go to next node
+                    <p>LangGraph: <i>"Decision function returned 'complete', so going to 'search_flights' node"</i></p>
+                </div>
+                
+                <div class="execution-step">
+                    <div class="step-number">9</div>
+                    <span class="highlight">Repeat Until END:</span> Continue executing nodes based on edges
+                    <p>Pattern: <span class="highlight">Execute Node → Check Edges → Execute Next Node → ...</span></p>
+                </div>
+            </div>
+            
+            <div id="tab3" class="tab-content">
+                <h3>📦 State Flow Through Workflow</h3>
+                
+                <div class="visual-flow">
+                    <div class="flow-step">Initial State<br/>(User Input)</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-step">validate_input<br/>Adds: missing_fields</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-step">search_flights<br/>Adds: flight_options</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-step">compare_select<br/>Adds: selected_flight</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-step">check_approval<br/>Adds: requires_approval</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-step">book_flight<br/>Adds: booking_id</div>
+                </div>
+                
+                <h3>State Transformation Example</h3>
+                
+                <div class="state-field">
+                    <div class="field-name">State at START:</div>
+                    <div class="code-block">
+{
+    "destination": "New York",
+    "departure_date": "2024-12-25",
+    "passenger_count": 1,
+    "max_budget": 500.0,
+    <span class="error">"flight_options": [],        // Empty</span>
+    <span class="error">"selected_flight": null,     // Not set</span>
+    <span class="error">"booking_id": null,         // Not set</span>
+    "history": []
+}
+                    </div>
+                </div>
+                
+                <div class="state-field">
+                    <div class="field-name">State after search_flights:</div>
+                    <div class="code-block">
+{
+    "destination": "New York",
+    "departure_date": "2024-12-25",
+    "passenger_count": 1,
+    "max_budget": 500.0,
+    <span class="success">"flight_options": [           // FILLED!</span>
+        {"airline": "Airline A", "price": 300, ...},
+        {"airline": "Airline B", "price": 250, ...},
+        {"airline": "Airline C", "price": 350, ...}
+    ],
+    <span class="error">"selected_flight": null,     // Still not set</span>
+    <span class="error">"booking_id": null,         // Still not set</span>
+    "history": ["Starting flight search...", "Found 3 flights"]
+}
+                    </div>
+                </div>
+                
+                <div class="state-field">
+                    <div class="field-name">State after compare_select:</div>
+                    <div class="code-block">
+{
+    "destination": "New York",
+    "departure_date": "2024-12-25",
+    "passenger_count": 1,
+    "max_budget": 500.0,
+    "flight_options": [...],
+    <span class="success">"selected_flight": {          // FILLED!</span>
+        "airline": "Airline B",
+        "price": 250,
+        "flight_number": "BB202"
+    },
+    "selection_reason": "cheapest_direct",
+    <span class="error">"booking_id": null,         // Still not set</span>
+    "history": ["Starting flight search...", "Found 3 flights", "Selected flight BB202"]
+}
+                    </div>
+                </div>
+                
+                <div class="state-field">
+                    <div class="field-name">State after book_flight:</div>
+                    <div class="code-block">
+{
+    "destination": "New York",
+    "departure_date": "2024-12-25",
+    "passenger_count": 1,
+    "max_budget": 500.0,
+    "flight_options": [...],
+    "selected_flight": {...},
+    <span class="success">"booking_id": "BK-A1B2C3D4",   // FILLED!</span>
+    "booking_timestamp": "2024-12-20T15:45:00",
+    "booking_status": "booked",
+    "history": [
+        "Starting flight search...",
+        "Found 3 flights",
+        "Selected flight BB202",
+        "Flight booked successfully: BK-A1B2C3D4"
+    ]
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <div class="card-title">🔧 LangGraph Components Explained</div>
+            </div>
+            
+            <div class="flow-container">
+                <div class="flow-item">
+                    <h3><i class="fas fa-code"></i> State Definition</h3>
+                    <p><span class="highlight">Your Custom Data Structure</span> - Like a shared notebook</p>
+                    <div class="code-block">
+class BookingState(TypedDict):
+    # User Input
+    destination: str
+    departure_date: str
+    max_budget: float
+    
+    # Workflow Data
+    flight_options: List[dict]
+    selected_flight: Optional[dict]
+    booking_id: Optional[str]
+    
+    # Tracking
+    history: List[str]
+    booking_status: str
+                    </div>
+                    <p><span class="info">Key Point:</span> YOU define the state structure based on YOUR needs.</p>
+                </div>
+                
+                <div class="flow-item">
+                    <h3><i class="fas fa-box"></i> Node (Workflow Step)</h3>
+                    <p><span class="highlight">Function that does one task</span> - Like a recipe step</p>
+                    <div class="code-block">
+def search_flights(state: BookingState) -> BookingState:
+    # 1. READ from state
+    destination = state["destination"]
+    
+    # 2. DO WORK
+    flights = search_api(destination)
+    
+    # 3. WRITE to state
+    state["flight_options"] = flights
+    
+    # 4. RETURN updated state
+    return state
+                    </div>
+                    <p><span class="info">Pattern:</span> Read → Process → Write → Return</p>
+                </div>
+            </div>
+            
+            <div class="flow-container">
+                <div class="flow-item">
+                    <h3><i class="fas fa-arrow-right"></i> Edge (Connection)</h3>
+                    <p><span class="highlight">Tells LangGraph where to go next</span> - Like a road sign</p>
+                    <div class="code-block">
+# Simple edge: After A, go to B
+workflow.add_edge("search_flights", "compare_select")
+
+# Conditional edge: Make decision
+workflow.add_conditional_edges(
+    "check_approval",
+    route_by_approval_need,  # Decision function
+    {
+        "needs_approval": "request_approval",
+        "skip_approval": "book_flight"
+    }
+)
+                    </div>
+                    <p><span class="info">Edges control flow</span> - NOT the nodes!</p>
+                </div>
+                
+                <div class="flow-item">
+                    <h3><i class="fas fa-project-diagram"></i> Graph (Workflow)</h3>
+                    <p><span class="highlight">Complete workflow definition</span> - Like a flowchart</p>
+                    <div class="code-block">
+# 1. Create empty graph
+workflow = StateGraph(BookingState)
+
+# 2. Add nodes
+workflow.add_node("search_flights", search_flights)
+
+# 3. Add edges
+workflow.add_edge(START, "search_flights")
+
+# 4. Compile
+app = workflow.compile()
+                    </div>
+                    <p><span class="info">Blueprint → Compiled → Executable</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-terminal"></i>
+                </div>
+                <div class="card-title">💻 Complete Code Example with Execution Flow</div>
+            </div>
+            
+            <h3>Complete Flight Booking Workflow Code</h3>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="showCodeTab('code1')">1. State Definition</div>
+                <div class="tab" onclick="showCodeTab('code2')">2. Nodes (Steps)</div>
+                <div class="tab" onclick="showCodeTab('code3')">3. Workflow Definition</div>
+                <div class="tab" onclick="showCodeTab('code4')">4. Execution</div>
+            </div>
+            
+            <div id="code1" class="tab-content active">
+                <div class="code-block">
+from typing import TypedDict, List, Optional, Literal
+
+class BookingState(TypedDict):
+    # === USER INPUT ===
+    destination: str
+    departure_date: str
+    passenger_count: int
+    max_budget: float
+    
+    # === WORKFLOW DATA ===
+    flight_options: List[dict]
+    selected_flight: Optional[dict]
+    booking_id: Optional[str]
+    
+    # === TRACKING ===
+    booking_status: str
+    history: List[str]
+    
+    # === APPROVAL ===
+    requires_approval: bool
+    approval_status: Optional[str]
+    
+    # === VALIDATION ===
+    input_complete: bool
+    missing_fields: List[str]
+                </div>
+                <p><span class="info">Note:</span> This is YOUR custom state. LangGraph uses it to pass data between nodes.</p>
+            </div>
+            
+            <div id="code2" class="tab-content">
+                <div class="code-block">
+# === NODE: Search Flights ===
+def search_flights(state: BookingState) -> BookingState:
+    # 1. READ from state (data from user/previous nodes)
+    destination = state["destination"]
+    date = state["departure_date"]
+    
+    # 2. DO WORK (search for flights)
+    flights = search_flights_api(destination, date)
+    
+    # 3. WRITE to state (save for next nodes)
+    state["flight_options"] = flights
+    state["booking_status"] = "searching"
+    state["history"].append(f"Found {len(flights)} flights")
+    
+    # 4. RETURN updated state
+    return state  # LangGraph passes this to next node
+
+# === NODE: Compare and Select ===
+def compare_and_select_flight(state: BookingState) -> BookingState:
+    # 1. READ flight_options from search_flights node
+    flights = state["flight_options"]
+    max_budget = state["max_budget"]
+    
+    # 2. DO WORK (compare flights)
+    selected = pick_best_flight(flights, max_budget)
+    
+    # 3. WRITE selected flight for next nodes
+    state["selected_flight"] = selected
+    state["requires_approval"] = selected["price"] > max_budget * 0.8
+    
+    # 4. RETURN updated state
+    return state
+                </div>
+                <p><span class="info">Pattern:</span> Each node follows Read → Process → Write → Return</p>
+            </div>
+            
+            <div id="code3" class="tab-content">
+                <div class="code-block">
+from langgraph.graph import StateGraph, START, END
+
+def create_booking_workflow():
+    # 1. Create empty workflow with state definition
+    workflow = StateGraph(BookingState)
+    
+    # 2. Add nodes (workflow steps)
+    workflow.add_node("search_flights", search_flights)
+    workflow.add_node("compare_select", compare_and_select_flight)
+    workflow.add_node("check_approval", check_approval_required)
+    workflow.add_node("book_flight", book_flight)
+    
+    # 3. Add edges (connections between steps)
+    workflow.add_edge(START, "search_flights")  # Start here
+    workflow.add_edge("search_flights", "compare_select")
+    
+    # 4. Add conditional edge (make decision)
+    workflow.add_conditional_edges(
+        "check_approval",
+        route_by_approval_need,  # Decision function
+        {
+            "needs_approval": "request_approval",
+            "skip_approval": "book_flight"
+        }
+    )
+    
+    workflow.add_edge("book_flight", END)
+    
+    # 5. Compile into executable workflow
+    app = workflow.compile()
+    return app
+                </div>
+                <p><span class="info">This creates the workflow blueprint</span> - Not executable until compiled!</p>
+            </div>
+            
+            <div id="code4" class="tab-content">
+                <div class="code-block">
+# === IN YOUR APPLICATION ===
+# (Like Java main() method)
+
+# 1. Create the workflow
+app = create_booking_workflow()
+
+# 2. Prepare initial state (user input)
+initial_state = {
+    "destination": "New York",
+    "departure_date": "2024-12-25",
+    "passenger_count": 1,
+    "max_budget": 500.0,
+    "flight_options": [],
+    "selected_flight": None,
+    "booking_id": None,
+    "booking_status": "new",
+    "history": []
+}
+
+config = {"configurable": {"thread_id": "booking-001"}}
+
+# 3. EXECUTION STARTS HERE (like Java main())
+print("🚀 Starting workflow execution...")
+result = app.invoke(initial_state, config)
+
+# 4. Get final result
+print(f"\n✅ Workflow completed!")
+print(f"   Booking ID: {result['booking_id']}")
+print(f"   Final Status: {result['booking_status']}")
+
+# 5. Print history
+print(f"\n📋 Workflow History:")
+for event in result['history']:
+    print(f"   • {event}")
+                </div>
+                <p><span class="highlight">app.invoke() is where execution starts</span> - Just like main() in Java!</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="card-title">❓ Common Questions Answered</div>
+            </div>
+            
+            <h3>Where Does Execution REALLY Start?</h3>
+            <div class="key-point">
+                <p><span class="success">✅ CORRECT:</span> Execution starts at <code>app.invoke(initial_state, config)</code> in YOUR application code.</p>
+                <p><span class="error">❌ WRONG:</span> Execution does NOT start in a node or edge.</p>
+            </div>
+            
+            <h3>What Happens Step-by-Step?</h3>
+            <ol style="margin-left: 20px; font-size: 1.1rem;">
+                <li><span class="highlight">User Action:</span> User clicks button in your app</li>
+                <li><span class="highlight">Your Code:</span> Calls <code>app.invoke(initial_state, config)</code></li>
+                <li><span class="highlight">LangGraph Engine:</span> Starts executing</li>
+                <li><span class="highlight">Check START Edge:</span> Looks for where to start</li>
+                <li><span class="highlight">Execute First Node:</span> Calls the function for that node</li>
+                <li><span class="highlight">Check Edges:</span> After node finishes, check where to go next</li>
+                <li><span class="highlight">Execute Next Node:</span> Based on edges</li>
+                <li><span class="highlight">Repeat:</span> Until reaching END</li>
+            </ol>
+            
+            <h3>Who Controls the Flow?</h3>
+            <div class="analogy-box">
+                <div class="analogy-title">🚦 Traffic Light Analogy:</div>
+                <p><strong>Nodes</strong> = Cars (they do the actual driving/work)</p>
+                <p><strong>Edges</strong> = Traffic lights & signs (they tell cars where to go)</p>
+                <p><strong>LangGraph</strong> = Traffic system (manages everything)</p>
+                <p><strong>You</strong> = City planner (you design the roads/lights)</p>
+            </div>
+            
+            <button class="interactive-btn" onclick="simulateExecution()">
+                <i class="fas fa-play"></i> Simulate Execution Flow
+            </button>
+            
+            <div id="simulation-output" style="margin-top: 20px; display: none;">
+                <div class="execution-step" id="sim-step1">
+                    <div class="step-number">1</div>
+                    <span class="highlight">User clicks "Book Flight" button</span>
+                </div>
+                <div class="execution-step" id="sim-step2" style="display: none;">
+                    <div class="step-number">2</div>
+                    <span class="highlight">Your app calls: result = app.invoke(initial_state, config)</span>
+                </div>
+                <div class="execution-step" id="sim-step3" style="display: none;">
+                    <div class="step-number">3</div>
+                    <span class="highlight">LangGraph: "Where to start? Check edges from START"</span>
+                </div>
+                <div class="execution-step" id="sim-step4" style="display: none;">
+                    <div class="step-number">4</div>
+                    <span class="highlight">Found: START → "validate_input"</span>
+                </div>
+                <div class="execution-step" id="sim-step5" style="display: none;">
+                    <div class="step-number">5</div>
+                    <span class="highlight">Execute: validate_user_input(state)</span>
+                </div>
+                <div class="execution-step" id="sim-step6" style="display: none;">
+                    <div class="step-number">6</div>
+                    <span class="highlight">Node returns updated state</span>
+                </div>
+                <div class="execution-step" id="sim-step7" style="display: none;">
+                    <div class="step-number">7</div>
+                    <span class="highlight">LangGraph: "Where next? Check edges from validate_input"</span>
+                </div>
+                <div class="execution-step" id="sim-step8" style="display: none;">
+                    <div class="step-number">8</div>
+                    <span class="highlight">Continues until END...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Mermaid diagrams
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+        
+        // Tab switching
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        // Code tab switching
+        function showCodeTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs in code section
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        // Simulation function
+        function simulateExecution() {
+            const outputDiv = document.getElementById('simulation-output');
+            outputDiv.style.display = 'block';
+            
+            // Reset all steps
+            for (let i = 1; i <= 8; i++) {
+                document.getElementById(`sim-step${i}`).style.display = 'none';
+            }
+            
+            // Show steps one by one
+            let step = 1;
+            const interval = setInterval(() => {
+                if (step <= 8) {
+                    document.getElementById(`sim-step${step}`).style.display = 'block';
+                    step++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 800);
+        }
+    </script>
+</body>
+</html>
